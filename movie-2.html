@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            background-color: black;
+            color: cyan;
+        }
+        #container{
+            width: 100%;
+            display: grid;
+            grid-template-columns: 24% 24% 24% 24%;
+            grid-gap: 1%;
+            padding: 9px;
+            margin: auto;
+            border: 1px solid black;
+            margin-top: 2%;
+
+        }
+        img{
+            box-shadow: 1px 1px 2px 0px gray;
+        }
+        input,button {
+            border: 1px solid white;
+        }
+
+         h4:hover, p:hover{
+            color: white;
+            font-weight: bolder;
+            font-style: italic;
+        }
+        #error{
+            width: 100%;
+            margin: auto;
+        }
+        .noo{
+            width: 20%;
+            margin: auto;
+            margin-top: 5%;
+            margin-left: 40%;
+           
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Search Engine</h1>
+    <input type="text" id="name">
+    <button onclick="getDetails()">Get Details</button>
+    <div id="error">
+
+    </div>
+    <div id="container">
+
+    </div>
+
+</body>
+</html>
+<script>
+    //fetch("https://fakestoreapi.com/products")
+// .then(function(res){
+//     return res.json();
+// })
+// .then(function(res){
+//    // console.log('res',res);
+//    //showProducts(res);
+// })
+// .catch(function(err){
+//     console.log('error',err);
+// })
+    async function getDetails(){
+        let movie = document.getElementById("name").value;
+        //let res = await
+        fetch(
+            `http://www.omdbapi.com/?apikey=3bd2bbeb&s=${movie}`
+        )
+        .then(function(res){
+            return res.json();
+        })
+        .then(function(res){
+        console.log("res",res)
+        console.log("data",res.Search)
+        showMovies(res.Search);
+        })
+        .catch(function(err){
+           // console.log("err",err);
+
+        let err1 = document.createElement('img');
+        err1.setAttribute("class",'noo');
+        err1.src="https://media4.giphy.com/media/Qg6cn9VrzNNKg/giphy.gif?cid=ecf05e47kxwav93m6yj7632j2ypkhp6s4zthvoak1lt7drp7&rid=giphy.gif&ct=g"
+        //err1.innerText="Couldn't find the Movie!";
+        errorParent.append(err1);
+
+        })
+        //let data = await res.json();
+
+        
+    }
+    let parent = document.getElementById("container");
+    
+    let errorParent = document.getElementById('error');
+    function showMovies(data){
+
+        parent.innerHTML=null;
+        errorParent.innerHTML=null;
+        
+        let title = document.getElementById("name").value;
+        for(var i=0;i<data.length;i++)
+        {
+           // if(title==data[i].Title){
+        let div = document.createElement('div');
+        let img = document.createElement('img');
+        img.src = data[i].Poster;
+        let name = document.createElement('h4');
+        name.innerText=data[i].Title;
+        let releaseDate = document.createElement('p');
+        releaseDate.innerText = data[i].Year;
+        div.append(img,name,releaseDate);
+        parent.append(div);
+        
+        //  }
+        //  else //if(flag==true)
+        //  {
+        // }
+
+        }
+        
+    }
+</script>
