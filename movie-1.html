@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            background-color: black;
+            color: cyan;
+        }
+        #container{
+            width: 25%;
+            padding: 9px;
+            margin: auto;
+            border: 1px solid black;
+            margin-top: 2%;
+
+        }
+        img{
+            box-shadow: 1px 1px 2px 0px gray;
+        }
+        input,button {
+            border: 1px solid white;
+        }
+        p:hover{
+            color: white;
+            font-weight: bolder;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Search Engine</h1>
+    <input type="text" id="name">
+    <button onclick="getDetails()">Get Details</button>
+    <div id="error">
+
+    </div>
+    <div id="container">
+
+    </div>
+
+</body>
+</html>
+<script>
+    async function getDetails(){
+        let movie = document.getElementById("name").value;
+        let res = await fetch(
+            `http://www.omdbapi.com/?i=tt3896198&apikey=3bd2bbeb`
+        )
+        let data = await res.json();
+        console.log("data",data)
+        showMovies(data);
+        
+    }
+    let parent = document.getElementById("container");
+
+    let errorParent = document.getElementById('error');
+    function showMovies(data){
+
+        parent.innerHTML=null;
+        errorParent.innerHTML=null;
+        let title = document.getElementById("name").value;
+        if(title==data.Title){
+        let img = document.createElement('img');
+        img.src = data.Poster;
+        let name = document.createElement('h4');
+        name.innerText=data.Title;
+        let rating = document.createElement('p');
+        rating.innerText = data.imdbRating;
+        let releaseDate = document.createElement('p');
+        releaseDate.innerText = data.Released;
+        let writers = document.createElement('p');
+        writers.innerText = data.Writer;
+        parent.append(img,name,rating,releaseDate,writers);
+    }else{
+        let err = document.createElement('h4');
+        err.innerText="Couldn't find the Movie!";
+        errorParent.append(err);
+    }
+    }
+</script>
