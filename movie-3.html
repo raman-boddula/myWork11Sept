@@ -43,6 +43,22 @@
             margin-top: 5%;
             margin-left: 40%;
         }
+        h3{
+            color: white;
+        }
+         
+        .animated-text{
+  width: 100px;
+  height: 20px;
+  background: red;
+  position: relative;
+  animation: mymove 5s infinite;
+}
+
+@keyframes mymove {
+  from {left: 0px;}
+  to {left: 50px;}
+}
     </style>
 </head>
 <body>
@@ -59,42 +75,29 @@
 </body>
 </html>
 <script>
-    //fetch("https://fakestoreapi.com/products")
-// .then(function(res){
-//     return res.json();
-// })
-// .then(function(res){
-//    // console.log('res',res);
-//    //showProducts(res);
-// })
-// .catch(function(err){
-//     console.log('error',err);
-// })
     async function getDetails(){
         let movie = document.getElementById("name").value;
         //let res = await
         fetch(
-            `http://www.omdbapi.com/?apikey=3bd2bbeb&s=${movie}`
+            `http://www.omdbapi.com/?t=${movie}&apikey=3bd2bbeb`
         )
         .then(function(res){
             return res.json();
         })
         .then(function(res){
-        console.log("res",res)
-        console.log("data",res.Search)
-        showMovies(res.Search);
+        console.log("resOG",res);
+        //console.log("resOG",res.Poster)
+        showMovies(res);
         })
         .catch(function(err){
-           // console.log("err",err);
-
+            
         let err1 = document.createElement('img');
         err1.setAttribute("class",'noo');
         err1.src="https://media4.giphy.com/media/Qg6cn9VrzNNKg/giphy.gif?cid=ecf05e47kxwav93m6yj7632j2ypkhp6s4zthvoak1lt7drp7&rid=giphy.gif&ct=g"
-        //err1.innerText="Couldn't find the Movie!";
+        
         errorParent.append(err1);
 
         })
-        //let data = await res.json();
 
         
     }
@@ -105,27 +108,30 @@
 
         parent.innerHTML=null;
         errorParent.innerHTML=null;
+        //let title = document.getElementById("name").value;
         
-        let title = document.getElementById("name").value;
-        for(var i=0;i<data.length;i++)
-        {
            // if(title==data[i].Title){
         let div = document.createElement('div');
         let img = document.createElement('img');
-        img.src = data[i].Poster;
+        img.src = data.Poster;
         let name = document.createElement('h4');
-        name.innerText=data[i].Title;
+        name.innerText=data.Title;
+        let rating = document.createElement('h4');
+        rating.innerText = "Rating "+data.imdbRating;
         let releaseDate = document.createElement('p');
-        releaseDate.innerText = data[i].Year;
-        div.append(img,name,releaseDate);
-        parent.append(div);
-        
-        //  }
-        //  else //if(flag==true)
-        //  {
-        // }
+        releaseDate.innerText = data.Released;
+        if(data.imdbRating > 7.5)
+        {
+            let rec = document.createElement('h3');
+            rec.setAttribute("class",".animated-text");
+            rec.innerText="Recommended";
+            div.append(rec,img,name,rating,releaseDate);
+            //break;
 
+        }else{
+            div.append(img,name,rating,releaseDate);
         }
-        
+        parent.append(div);
+
     }
 </script>
