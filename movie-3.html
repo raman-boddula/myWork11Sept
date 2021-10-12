@@ -44,28 +44,17 @@
             margin-left: 40%;
         }
         h3{
-            color: white;
+            width:28%;
+            color: greenyellow;
+            box-shadow: 1px 1px 2px 0px palegreen;
         }
-         
-        .animated-text{
-  width: 100px;
-  height: 20px;
-  background: red;
-  position: relative;
-  animation: mymove 5s infinite;
-}
-
-@keyframes mymove {
-  from {left: 0px;}
-  to {left: 50px;}
-}
     </style>
 </head>
 <body>
     <h1>Movie Search Engine</h1>
     <input type="text" id="name">
     <button onclick="getDetails()">Get Details</button>
-    <div id="error">
+    <div id="errorMsg">
 
     </div>
     <div id="container">
@@ -75,9 +64,10 @@
 </body>
 </html>
 <script>
+    console.log("I couldn't find the 8.5 above rating movie in this fetch url ,i kept a condition as 7.5 & above")
     async function getDetails(){
         let movie = document.getElementById("name").value;
-        //let res = await
+        let res = await
         fetch(
             `http://www.omdbapi.com/?t=${movie}&apikey=3bd2bbeb`
         )
@@ -103,14 +93,11 @@
     }
     let parent = document.getElementById("container");
     
-    let errorParent = document.getElementById('error');
+    let errorParent = document.getElementById('errorMsg');
     function showMovies(data){
 
         parent.innerHTML=null;
         errorParent.innerHTML=null;
-        //let title = document.getElementById("name").value;
-        
-           // if(title==data[i].Title){
         let div = document.createElement('div');
         let img = document.createElement('img');
         img.src = data.Poster;
@@ -123,12 +110,13 @@
         if(data.imdbRating > 7.5)
         {
             let rec = document.createElement('h3');
-            rec.setAttribute("class",".animated-text");
+            rec.setAttribute("class","aText");
             rec.innerText="Recommended";
             div.append(rec,img,name,rating,releaseDate);
-            //break;
 
-        }else{
+        }
+        else
+        {
             div.append(img,name,rating,releaseDate);
         }
         parent.append(div);
